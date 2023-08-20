@@ -8,7 +8,7 @@ class Order
     #[Assert\NotNull(message: "The 'product' field should not be empty")]
     private Product $product;
     #[Assert\NotNull(message: "The 'taxNumber' field should not be empty")]
-    private string $taxNumber;
+    private string|null $taxNumber;
     private Coupon|null $couponCode;
     #[Assert\NotNull(message: "The 'paymentProcessor' field should not be empty")]
     private array|null $paymentProcessor;

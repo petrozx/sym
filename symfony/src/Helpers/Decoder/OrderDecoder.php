@@ -54,7 +54,7 @@ class OrderDecoder
             if (count($errors) > 0) {
                 $re = '/(?\'message\'.*?) \(code/m';
                 preg_match_all($re, (string) $errors, $matches, PREG_SET_ORDER, 0);
-                $this->errors = array_reduce($matches, function ($acc, $el) {
+                $this->errors[] = array_reduce($matches, function ($acc, $el) {
                     $acc[] = trim($el['message']);
                     return $acc;
                 },[]);
