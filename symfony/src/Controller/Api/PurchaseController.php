@@ -20,10 +20,4 @@ class PurchaseController extends AbstractController
     {
         return $purchaseManager->purchaseProduct($request, $validator);
     }
-
-    #[Route(path: "/api/test", methods: ["POST"])]
-    public function test(Request $request, ProductRepository $productRepository, CouponRepository $couponRepository): Response
-    {
-        return new Response("OK");
-    }
 }
