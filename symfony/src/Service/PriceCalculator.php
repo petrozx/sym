@@ -39,7 +39,7 @@ readonly class PriceCalculator
         $percentTax = TaxRate::tryFromName(substr($order->getTaxNumber(), 0, 2))->value;
         $sumTax = ($order->getProduct()->getPrice() * $percentTax)/100;
         $sum = $order->getProduct()->getPrice() + $sumTax;
-        if (!empty($order->getCouponCode())) {
+        if (!empty($order->isCoupon())) {
             return match ($order->getCouponCode()->getType()->value) {
                 'FIX' => $sum - $order->getCouponCode()->getDiscount(),
                 'CALCULATE' => $sum - ($sum * $order->getCouponCode()->getDiscount())/100,

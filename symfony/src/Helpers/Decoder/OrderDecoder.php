@@ -17,7 +17,7 @@ class OrderDecoder
     private string $requestData;
     private CouponRepository $couponRepository;
     private ProductRepository $productRepository;
-    private array $errors;
+    private array $errors = [];
 
     public function __construct(
         Request $request,
@@ -54,10 +54,10 @@ class OrderDecoder
             if (count($errors) > 0) {
                 $re = '/(?\'message\'.*?) \(code/m';
                 preg_match_all($re, (string) $errors, $matches, PREG_SET_ORDER, 0);
-                $this->errors[] = array_reduce($matches, function ($acc, $el) {
+                $this->errors = array_merge($this->errors, array_reduce($matches, function ($acc, $el) {
                     $acc[] = trim($el['message']);
                     return $acc;
-                },[]);
+                },[]));
             }
         }
         if (!empty($this->errors)) {
@@ -72,7 +72,6 @@ class OrderDecoder
         if (isset($prcs->$value)) {
             return $prcs->$value;
         }
-        $this->errors[] = 'Sorry, the payment service is not supported';
         return null;
     }
 
@@ -82,7 +81,6 @@ class OrderDecoder
         if (!empty($product)) {
             return $product;
         }
-        $this->errors[] = 'Sorry, this product is missing';
         return null;
     }
 
@@ -101,7 +99,6 @@ class OrderDecoder
         if ((new TaxesValidate($value))->validate()) {
             return $value;
         }
-        $this->errors[] = 'Sorry, the code does not exist';
         return null;
     }
 }

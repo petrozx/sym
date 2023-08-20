@@ -5,12 +5,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class Order
 {
-    #[Assert\NotNull(message: "The 'product' field should not be empty")]
+    #[Assert\NotNull(message: "Sorry, this product is missing")]
     private Product $product;
-    #[Assert\NotNull(message: "The 'taxNumber' field should not be empty")]
+    #[Assert\NotNull(message: "Sorry, the code does not exist")]
     private string|null $taxNumber;
     private Coupon|null $couponCode;
-    #[Assert\NotNull(message: "The 'paymentProcessor' field should not be empty")]
+    #[Assert\NotNull(message: "Sorry, the payment service is not supported")]
     private array|null $paymentProcessor;
 
     /**
@@ -77,5 +77,9 @@ class Order
         $this->paymentProcessor = $paymentProcessor;
     }
 
+    public function isCoupon(): bool
+    {
+        return isset($this->couponCode);
+    }
 
 }
