@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Order
 {
     #[Assert\NotNull(message: "Sorry, this product is missing")]
-    private Product $product;
+    private Product|null $product;
     #[Assert\NotNull(message: "Sorry, the code does not exist")]
     private array|null $taxNumber;
     private Coupon|null $couponCode;
@@ -14,17 +14,17 @@ class Order
     private array|null $paymentProcessor;
 
     /**
-     * @return Product
+     * @return Product|null
      */
-    public function getProduct(): Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
     /**
-     * @param Product $product
+     * @param Product|null $product
      */
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }
