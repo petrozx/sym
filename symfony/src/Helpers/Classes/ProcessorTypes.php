@@ -5,7 +5,7 @@ namespace App\Helpers\Classes;
 use App\PaymentProcessor\PaypalPaymentProcessor;
 use App\PaymentProcessor\StripePaymentProcessor;
 
-class PrcsType
+class ProcessorTypes
 {
     public array $paypal = [
         'class' => PaypalPaymentProcessor::class,

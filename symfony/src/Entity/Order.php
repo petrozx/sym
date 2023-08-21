@@ -8,39 +8,39 @@ class Order
     #[Assert\NotNull(message: "Sorry, this product is missing")]
     private Product $product;
     #[Assert\NotNull(message: "Sorry, the code does not exist")]
-    private string|null $taxNumber;
+    private array|null $taxNumber;
     private Coupon|null $couponCode;
     #[Assert\NotNull(message: "Sorry, the payment service is not supported")]
     private array|null $paymentProcessor;
 
     /**
-     * @return Product|null
+     * @return Product
      */
-    public function getProduct(): ?Product
+    public function getProduct(): Product
     {
         return $this->product;
     }
 
     /**
-     * @param Product|null $product
+     * @param Product $product
      */
-    public function setProduct(?Product $product): void
+    public function setProduct(Product $product): void
     {
         $this->product = $product;
     }
 
     /**
-     * @return string|null
+     * @return array|null
      */
-    public function getTaxNumber(): ?string
+    public function getTaxNumber(): ?array
     {
         return $this->taxNumber;
     }
 
     /**
-     * @param string|null $taxNumber
+     * @param array|null $taxNumber
      */
-    public function setTaxNumber(?string $taxNumber): void
+    public function setTaxNumber(?array $taxNumber): void
     {
         $this->taxNumber = $taxNumber;
     }
@@ -76,6 +76,8 @@ class Order
     {
         $this->paymentProcessor = $paymentProcessor;
     }
+
+
 
     public function isCoupon(): bool
     {

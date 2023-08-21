@@ -2,12 +2,12 @@
 
 namespace App\Helpers\Validate;
 
-use App\Helpers\Enums\TaxesType;
+use App\Helpers\Classes\TaxTaypes;
 
-readonly class TaxesValidate
+class TaxesValidate
 {
     public function __construct(
-        private string $taxNumber,
+        private readonly string $taxNumber,
     ){}
 
     private function generateTaxNumberPattern($template): string
@@ -20,13 +20,18 @@ readonly class TaxesValidate
         return "/^{$pattern}$/";
     }
 
-    public function validate(): bool
+    public function validate(): bool|array
     {
         $countryCode = substr($this->taxNumber, 0, 2);
-        $taxesType = TaxesType::tryFromName($countryCode);
-        if (isset($taxesType)) {
-            $pattern = $this->generateTaxNumberPattern($taxesType->value);
-            return preg_match($pattern, $this->taxNumber) === 1;
+        $taxType = new TaxTaypes();
+        try {
+            $taxArray = $taxType->$countryCode;
+            $pattern = $this->generateTaxNumberPattern($taxArray['mask']);
+            if (preg_match($pattern, $this->taxNumber) === 1) {
+                return $taxArray;
+            }
+        } catch (\Exception) {
+            return false;
         }
         return false;
     }

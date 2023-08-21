@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class PurchaseManager
+class PurchaseManager
 {
     public function __construct(
-        private ProductRepository $productRepository,
-        private CouponRepository $couponRepository,
-        private PriceCalculator $priceCalculator,
+        private readonly ProductRepository $productRepository,
+        private readonly CouponRepository  $couponRepository,
+        private readonly PriceCalculator   $priceCalculator,
     ){}
 
     public function purchaseProduct(Request $request, ValidatorInterface $validator): JsonResponse

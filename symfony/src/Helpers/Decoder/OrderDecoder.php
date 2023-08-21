@@ -5,7 +5,7 @@ namespace App\Helpers\Decoder;
 use App\Entity\Coupon;
 use App\Entity\Product;
 use App\Entity\Order;
-use App\Helpers\Classes\PrcsType;
+use App\Helpers\Classes\ProcessorTypes;
 use App\Helpers\Validate\TaxesValidate;
 use App\Repository\CouponRepository;
 use App\Repository\ProductRepository;
@@ -68,7 +68,7 @@ class OrderDecoder
 
     private function paymentProcessorCheck($value): ?array
     {
-        $prcs = new PrcsType();
+        $prcs = new ProcessorTypes();
         if (isset($prcs->$value)) {
             return $prcs->$value;
         }
@@ -94,10 +94,11 @@ class OrderDecoder
         return null;
     }
 
-    private function taxCheck(string $value): ?string
+    private function taxCheck(string $value): ?array
     {
-        if ((new TaxesValidate($value))->validate()) {
-            return $value;
+        $taxResult = (new TaxesValidate($value))->validate();
+        if ($taxResult) {
+            return $taxResult;
         }
         return null;
     }

@@ -4,18 +4,17 @@ namespace App\Service;
 
 use App\Entity\Order;
 use App\Helpers\Decoder\OrderDecoder;
-use App\Helpers\Enums\TaxRate;
 use App\Repository\CouponRepository;
 use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-readonly class PriceCalculator
+class PriceCalculator
 {
     public function __construct(
-        private ProductRepository $productRepository,
-        private CouponRepository  $couponRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly CouponRepository  $couponRepository,
     ){}
 
     public function calculatePrice(Request $request, ValidatorInterface $validator): JsonResponse
@@ -36,8 +35,7 @@ readonly class PriceCalculator
 
     public function calculation(Order $order): float|int
     {
-        $percentTax = TaxRate::tryFromName(substr($order->getTaxNumber(), 0, 2))->value;
-        $sumTax = ($order->getProduct()->getPrice() * $percentTax)/100;
+        $sumTax = ($order->getProduct()->getPrice() * $order->getTaxNumber()['percent'])/100;
         $sum = $order->getProduct()->getPrice() + $sumTax;
         if (!empty($order->isCoupon())) {
             return match ($order->getCouponCode()->getType()->value) {
