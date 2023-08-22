@@ -32,8 +32,12 @@ class PurchaseManager
                 $paymentClass = $order->getPaymentProcessor()['class'];
                 $paymentWay = new $paymentClass();
                 $paymentMethod = $order->getPaymentProcessor()['action'];
-                $paymentWay->$paymentMethod($resulSum);
-                $result = new JsonResponse('Thank you for the purchase', 200);
+                $resultOfPay = $paymentWay->$paymentMethod($resulSum);
+                if ($resultOfPay !== false) {
+                    $result = new JsonResponse('Thank you for the purchase', 200);
+                } else {
+                    $result = new JsonResponse('Payment dont pass', 400);
+                }
             } catch (\Exception $e) {
                 $result = new JsonResponse($e->getMessage(), 400);
             }
